@@ -1,9 +1,12 @@
 <h1>⚠️ IMPORTANT (For Users of NVIDIA Kepler Graphics Cards) 
 This fork has been created specifically for NVIDIA Kepler graphics cards (GT 6xx or GT 7xx). 
 <br>
+<br>
 ⚠️ This repository will not be able to follow any changes to Nvidia Kepler graphics cards from an upstream source. If you are using a Nvidia Kepler graphics card, do not perform an in-application upgrade or switch to regular Wasabi builds.
 <br>
+<br>
 Wasabi from upstream can potentially cause crashes on Nvidia Kepler graphics cards since these cards attempt to use a Vulkan present mode not supported by the hardware (using either the PRESENT_MODE_IMMEDIATE or PRESENT_MODE_MAILBOX). The only present mode guaranteed to be supported by Nvidia Kepler graphics cards is FIFO present mode.
+<br>
 <br>
 The fork adds fallback support to FIFO compliant with Vulkan specifications, allowing Wasabi to operate properly on Nvidia Kepler graphics cards. This issue does not affect newer graphics card models.</h1>
 <p align="center">--- Now the actual README. ---</p>
