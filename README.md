@@ -1,4 +1,12 @@
-<h1>INFO FROM OXOP: THIS WILL NOT BE UPDATED, IF YOU USE KEPLER, DO NOT PRESS UPGRADE IT WILL UPGRADE TO NORMAL WHICH USES VULKAN 1.2 AND EVEN NEWER MODE (KEPLERS ONLY SUPPORT FIFO, AND NORMAL USES Immediate Mode!!!!)</h1>
+<h1>⚠️ IMPORTANT (For Users of NVIDIA Kepler Graphics Cards) 
+This fork has been created specifically for NVIDIA Kepler graphics cards (GT 6xx or GT 7xx). 
+<br>
+⚠️ This repository will not be able to follow any changes to Nvidia Kepler graphics cards from an upstream source. If you are using a Nvidia Kepler graphics card, do not perform an in-application upgrade or switch to regular Wasabi builds.
+<br>
+Wasabi from upstream can potentially cause crashes on Nvidia Kepler graphics cards since these cards attempt to use a Vulkan present mode not supported by the hardware (using either the PRESENT_MODE_IMMEDIATE or PRESENT_MODE_MAILBOX). The only present mode guaranteed to be supported by Nvidia Kepler graphics cards is FIFO present mode.
+<br>
+The fork adds fallback support to FIFO compliant with Vulkan specifications, allowing Wasabi to operate properly on Nvidia Kepler graphics cards. This issue does not affect newer graphics card models.</h1>
+<p align="center">--- Now the actual README. ---</p>
 <h1 align="center">Wasabi (For Kepler)</h1>
 <p align="center"><img src="/assets/logo.svg" width="128"/></p>
 <p align="center">Wasabi is a modern and fast real-time MIDI player written in Rust.</p>
