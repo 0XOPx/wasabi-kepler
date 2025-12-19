@@ -23,6 +23,9 @@ Credits to:
 - [PatoFlamejanteTV](https://github.com/PatoFlamejanteTV)
 - [People-11](https://github.com/People-11)
 - [Zwatotem](https://github.com/Zwatotem)
+  And the only one
+  
+- [Wasabi](https://github.com/BlackMIDIDevs/wasabi)
 <p align="center">--- Now the actual README. ---</p>
 <h1 align="center">Wasabi (For Kepler)</h1>
 <p align="center"><img src="/assets/logo.svg" width="128"/></p>
