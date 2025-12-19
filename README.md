@@ -1,4 +1,4 @@
-<h1 align="center">Wasabi</h1>
+<h1 align="center">Wasabi (For Kepler)</h1>
 <p align="center"><img src="/assets/logo.svg" width="128"/></p>
 <p align="center">Wasabi is a modern and fast real-time MIDI player written in Rust.</p>
 <p align="center">
