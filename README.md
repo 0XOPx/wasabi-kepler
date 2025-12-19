@@ -10,7 +10,7 @@ Wasabi from upstream can potentially cause crashes on Nvidia Kepler graphics car
 <br>
 ⚠️ This fork is another mode than upstream, read
     
-[this](https://github.com/0XOPx/wasabi-kepler/blob/master/why-not-upstream.txt) to see why.
+[this](https://github.com/OXOPSoftware/wasabi-kepler/blob/master/why-not-upstream.txt) to see why.
 The fork adds fallback support to FIFO compliant with Vulkan specifications, allowing Wasabi to operate properly on Nvidia Kepler graphics cards. This issue does not affect newer graphics card models.</h1>
 <br>
 <br>
