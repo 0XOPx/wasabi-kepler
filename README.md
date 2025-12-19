@@ -1,3 +1,4 @@
+<h1>INFO FROM OXOP: THIS WILL NOT BE UPDATED, IF YOU USE KEPLER, DO NOT PRESS UPGRADE IT WILL UPGRADE TO NORMAL WHICH USES VULKAN 1.2 AND EVEN NEWER MODE (KEPLERS ONLY SUPPORT FIFO, AND NORMAL USES Immediate Mode!!!!)</h1>
 <h1 align="center">Wasabi (For Kepler)</h1>
 <p align="center"><img src="/assets/logo.svg" width="128"/></p>
 <p align="center">Wasabi is a modern and fast real-time MIDI player written in Rust.</p>
