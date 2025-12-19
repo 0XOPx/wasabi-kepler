@@ -11,11 +11,11 @@ Wasabi from upstream can potentially cause crashes on Nvidia Kepler graphics car
 The fork adds fallback support to FIFO compliant with Vulkan specifications, allowing Wasabi to operate properly on Nvidia Kepler graphics cards. This issue does not affect newer graphics card models.</h1>
 <br>
 <br>
-<h1>Credits to:</h1>
-<br>
+Credits to:
+
 - [Arudano](https://github.com/arduano)
 - [MBMS (MyBlackMIDIScore)](https://github.com/MyBlackMIDIScore)
-- [Kaydax (Ay shotout to him he made Chikara!)](https://github.com/Kaydax)
+- [Kaydax (Ay shoutout to him, he made Chikara!)](https://github.com/Kaydax)
 - [StratusFearMe21](https://github.com/StratusFearMe21)
 - [PatoFlamejanteTV](https://github.com/PatoFlamejanteTV)
 - [People-11](https://github.com/People-11)
