@@ -1,3 +1,4 @@
+use vulkano::swapchain::SurfaceInfo;
 use std::sync::Arc;
 
 use egui_winit::winit::{dpi::PhysicalSize, window::Window};
@@ -6,8 +7,8 @@ use vulkano::{
     format::Format,
     image::{view::ImageView, ImageUsage},
     swapchain::{
-        PresentMode, Surface, Swapchain, SwapchainAcquireFuture, SwapchainCreateInfo,
-        SwapchainPresentInfo,
+        acquire_next_image, PresentMode, Surface, Swapchain, SwapchainAcquireFuture,
+        SwapchainCreateInfo, SwapchainPresentInfo,
     },
     sync::{self, GpuFuture},
     Validated, VulkanError,
@@ -32,15 +33,34 @@ pub struct ManagedSwapchain {
     device: Arc<Device>,
     recreate_on_next_frame: bool,
     present_mode: PresentMode,
+    physical: Arc<PhysicalDevice>,
+    surface: Arc<Surface>,
 }
 
 impl ManagedSwapchain {
+    fn choose_present_mode(&self, requested: PresentMode) -> PresentMode {
+        let supported = self
+            .physical
+            .surface_present_modes(&self.surface, SurfaceInfo::default())
+            .unwrap();
+
+        if supported.contains(&requested) {
+            requested
+        } else {
+            eprintln!(
+                "Present mode {:?} not supported, falling back to FIFO",
+                requested
+            );
+            PresentMode::Fifo
+        }
+    }
+
     pub fn create(
         surface: Arc<Surface>,
         window: Arc<Window>,
         physical: Arc<PhysicalDevice>,
         device: Arc<Device>,
-        present_mode: PresentMode,
+        requested_present_mode: PresentMode,
     ) -> Self {
         let surface_capabilities = physical
             .surface_capabilities(&surface, Default::default())
@@ -49,16 +69,34 @@ impl ManagedSwapchain {
         let formats = physical
             .surface_formats(&surface, Default::default())
             .unwrap();
+
         let image_format = formats
             .iter()
             .find(|v| v.0 == Format::B8G8R8A8_UNORM)
             .map(|v| v.0)
-            .unwrap_or(Format::B8G8R8A8_UNORM);
-        let image_extent = window.inner_size().into();
+            .unwrap_or(formats[0].0);
+
+        let image_extent: [u32; 2] = window.inner_size().into();
+
+        let present_mode = {
+    let supported = physical
+        .surface_present_modes(&surface, SurfaceInfo::default())
+        .unwrap();
+
+    if supported.contains(&requested_present_mode) {
+        requested_present_mode
+    } else {
+        eprintln!(
+            "Present mode {:?} not supported, falling back to FIFO",
+            requested_present_mode
+        );
+        PresentMode::Fifo
+    }
+};
 
         let (swapchain, images) = Swapchain::new(
             device.clone(),
-            surface,
+            surface.clone(),
             SwapchainCreateInfo {
                 min_image_count: surface_capabilities.min_image_count,
                 image_format,
@@ -75,7 +113,7 @@ impl ManagedSwapchain {
         )
         .unwrap();
 
-        let images = images
+        let image_views = images
             .into_iter()
             .map(|image| ImageView::new_default(image).unwrap())
             .collect::<Vec<_>>();
@@ -84,16 +122,18 @@ impl ManagedSwapchain {
             state: SwapchainState {
                 size: image_extent,
                 images_state: ImagesState {
-                    count: images.len(),
+                    count: image_views.len(),
                     format: swapchain.image_format(),
                 },
             },
             swap_chain: swapchain,
-            image_views: images,
+            image_views,
             previous_frame_end: Some(sync::now(device.clone()).boxed()),
             device,
             recreate_on_next_frame: false,
             present_mode,
+            physical,
+            surface,
         }
     }
 
@@ -109,38 +149,41 @@ impl ManagedSwapchain {
     }
 
     pub fn set_present_mode(&mut self, present_mode: PresentMode) {
-        let prev = self.present_mode;
-        self.present_mode = present_mode;
+        let chosen = self.choose_present_mode(present_mode);
 
-        if prev != self.present_mode {
+        if self.present_mode != chosen {
+            self.present_mode = chosen;
             self.recreate();
         }
     }
 
     pub fn recreate(&mut self) {
-        let (new_swapchain, new_images) = match self.swap_chain.recreate(SwapchainCreateInfo {
-            image_extent: self.state.size,
-            present_mode: self.present_mode,
-            ..self.swap_chain.create_info()
-        }) {
+        let present_mode = self.choose_present_mode(self.present_mode);
+
+        let (new_swapchain, new_images) = match self.swap_chain.recreate(
+            SwapchainCreateInfo {
+                image_extent: self.state.size,
+                present_mode,
+                ..self.swap_chain.create_info()
+            },
+        ) {
             Ok(r) => r,
             Err(Validated::Error { .. }) => return,
             Err(e) => panic!("Failed to recreate swapchain: {e:?}"),
         };
+
         self.swap_chain = new_swapchain;
-        let new_images = new_images
+        self.image_views = new_images
             .into_iter()
             .map(|image| ImageView::new_default(image).unwrap())
-            .collect::<Vec<_>>();
-
-        self.image_views = new_images;
+            .collect();
     }
 
     pub fn take_previous_frame_end(&mut self) -> Option<Box<dyn GpuFuture>> {
         self.previous_frame_end.take()
     }
 
-    pub fn acquire_frame(&'_ mut self) -> (SwapchainFrame<'_>, SwapchainAcquireFuture) {
+    pub fn acquire_frame(&mut self) -> (SwapchainFrame<'_>, SwapchainAcquireFuture) {
         if self.recreate_on_next_frame {
             self.recreate();
             self.recreate_on_next_frame = false;
@@ -153,20 +196,15 @@ impl ManagedSwapchain {
                 panic!("Failed to acquire next image after 10 tries");
             }
 
-            let next = vulkano::swapchain::acquire_next_image(self.swap_chain.clone(), None);
+            let next = acquire_next_image(self.swap_chain.clone(), None);
 
             let (image_num, suboptimal, acquire_future) = match next {
                 Ok(r) => r,
-                // TODO: Handle more errors, e.g. DeviceLost, by re-creating the entire graphics chain
-                Err(Validated::Error(e)) => {
-                    if e == VulkanError::OutOfDate {
-                        self.recreate();
-                        continue;
-                    } else {
-                        panic!("Failed to acquire next image: {e:?}");
-                    }
+                Err(Validated::Error(e)) if e == VulkanError::OutOfDate => {
+                    self.recreate();
+                    continue;
                 }
-                Err(e) => panic!("Unknown error: {e:?}"),
+                Err(e) => panic!("Failed to acquire next image: {e:?}"),
             };
 
             if suboptimal {
@@ -188,10 +226,8 @@ impl ManagedSwapchain {
 
 pub struct SwapchainFrame<'a> {
     presented: bool,
-
     pub image_num: u32,
     pub image: Arc<ImageView>,
-
     managed_swap_chain: &'a mut ManagedSwapchain,
 }
 
@@ -210,25 +246,15 @@ impl<'a> SwapchainFrame<'a> {
 
         match future {
             Ok(future) => {
-                // FIXME: A hack to prevent OutOfMemory error on Nvidia
-                // https://github.com/vulkano-rs/vulkano/issues/627
-                match future.wait(None) {
-                    Ok(x) => x,
-                    Err(err) => println!("err: {err:?}"),
-                }
+                let _ = future.wait(None);
                 sc.previous_frame_end = Some(future.boxed());
             }
-            Err(Validated::Error(e)) => {
-                if e == VulkanError::OutOfDate {
-                    sc.recreate_on_next_frame = true;
-                    sc.previous_frame_end = Some(sync::now(sc.device.clone()).boxed());
-                } else {
-                    println!("Failed to flush future: {e:?}");
-                    sc.previous_frame_end = Some(sync::now(sc.device.clone()).boxed());
-                }
+            Err(Validated::Error(e)) if e == VulkanError::OutOfDate => {
+                sc.recreate_on_next_frame = true;
+                sc.previous_frame_end = Some(sync::now(sc.device.clone()).boxed());
             }
             Err(e) => {
-                println!("Unknown error: {e:?}");
+                eprintln!("Present error: {e:?}");
                 sc.previous_frame_end = Some(sync::now(sc.device.clone()).boxed());
             }
         }
@@ -239,10 +265,10 @@ impl<'a> SwapchainFrame<'a> {
     }
 }
 
-impl<'a> std::ops::Drop for SwapchainFrame<'a> {
+impl<'a> Drop for SwapchainFrame<'a> {
     fn drop(&mut self) {
         if !self.presented {
-            eprintln!("SwapchainFrame dropped before it was presented.")
+            eprintln!("SwapchainFrame dropped before it was presented.");
         }
     }
 }
