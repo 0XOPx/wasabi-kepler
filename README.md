@@ -13,7 +13,7 @@ The fork adds fallback support to FIFO compliant with Vulkan specifications, all
 <br>
 <h1>Credits to:</h1>
 <br>
-<h1>[Arudano](https://github.com/arduano), [MBMS (MyBlackMIDIScore)](https://github.com/MyBlackMIDIScore), [Kaydax (Ay shotout to him he made Chikara!)](https://github.com/Kaydax), [StratusFearMe21](https://github.com/StratusFearMe21), [PatoFlamejanteTV](https://github.com/PatoFlamejanteTV), [People-11](https://github.com/People-11), [Zwatotem](https://github.com/Zwatotem)</h1>
+[Arudano](https://github.com/arduano), [MBMS (MyBlackMIDIScore)](https://github.com/MyBlackMIDIScore), [Kaydax (Ay shotout to him he made Chikara!)](https://github.com/Kaydax), [StratusFearMe21](https://github.com/StratusFearMe21), [PatoFlamejanteTV](https://github.com/PatoFlamejanteTV), [People-11](https://github.com/People-11), [Zwatotem](https://github.com/Zwatotem)
 <p align="center">--- Now the actual README. ---</p>
 <h1 align="center">Wasabi (For Kepler)</h1>
 <p align="center"><img src="/assets/logo.svg" width="128"/></p>
