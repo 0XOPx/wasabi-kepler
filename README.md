@@ -8,6 +8,7 @@ This fork has been created specifically for NVIDIA Kepler graphics cards (GT 6xx
 Wasabi from upstream can potentially cause crashes on Nvidia Kepler graphics cards since these cards attempt to use a Vulkan present mode not supported by the hardware (using either the PRESENT_MODE_IMMEDIATE or PRESENT_MODE_MAILBOX). The only present mode guaranteed to be supported by Nvidia Kepler graphics cards is FIFO present mode.
 <br>
 <br>
+⚠️ This fork is another mode than upstream, read [this](https://github.com/0XOPx/wasabi-kepler/blob/master/why-not-upstream.txt) to see why.
 The fork adds fallback support to FIFO compliant with Vulkan specifications, allowing Wasabi to operate properly on Nvidia Kepler graphics cards. This issue does not affect newer graphics card models.</h1>
 <br>
 <br>
