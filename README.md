@@ -24,7 +24,7 @@ Credits to:
 - [People-11](https://github.com/People-11)
 - [Zwatotem](https://github.com/Zwatotem)
   <br>
-  And the only one [Wasabi](https://github.com/BlackMIDIDevs/wasabi)
+- And the only one [Wasabi](https://github.com/BlackMIDIDevs/wasabi)
 <p align="center">--- Now the actual README. ---</p>
 <h1 align="center">Wasabi (For Kepler)</h1>
 <p align="center"><img src="/assets/logo.svg" width="128"/></p>
