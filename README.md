@@ -30,9 +30,9 @@ Credits to:
 <p align="center"><img src="/assets/logo.svg" width="128"/></p>
 <p align="center">Wasabi is a modern and fast real-time MIDI player written in Rust.</p>
 <p align="center">
-<img alt="GitHub License" src="https://img.shields.io/github/license/BlackMIDIDevs/wasabi">
-<img alt="GitHub Release" src="https://img.shields.io/github/v/release/BlackMIDIDevs/wasabi">
-<img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/BlackMIDIDevs/wasabi/total">
+<img alt="GitHub License" src="https://img.shields.io/github/license/OXOPSoftware/wasabi-kepler">
+<img alt="GitHub Release" src="https://img.shields.io/github/v/release/OXOPSoftware/wasabi-kepler">
+<img alt="GitHub Downloads" src="https://img.shields.io/github/downloads/OXOPSoftware/wasabi-kepler/total">
 </p>
 
 ## Features
