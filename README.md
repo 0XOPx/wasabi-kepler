@@ -24,7 +24,7 @@ Credits to:
 - [People-11](https://github.com/People-11)
 - [Zwatotem](https://github.com/Zwatotem)
   <br>
-  And the only one
+  And the only one:
   
 - [Wasabi](https://github.com/BlackMIDIDevs/wasabi)
 <p align="center">--- Now the actual README. ---</p>
