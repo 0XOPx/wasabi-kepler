@@ -49,13 +49,13 @@ Your system must support Vulkan.
 
 ### Option A *(recommended)*
 
-You can download and run a pre-built binary of Wasabi from the [releases page.](https://github.com/BlackMIDIDevs/wasabi/releases)
+You can download and run a pre-built binary of Wasabi from the [releases page.](https://github.com/OXOPSoftware/wasabi-kepler/releases)
 
 ### Option B *(advanced)*
 
 You can build Wasabi yourself by following these steps:
 
-- Clone the repository using `git clone https://github.com/BlackMIDIDevs/wasabi.git` (or [download as a ZIP from GitHub](https://github.com/BlackMIDIDevs/wasabi/archive/refs/heads/master.zip))
+- Clone the repository using `git clone https://github.com/OXOPSoftware/wasabi-kepler.git` (or [download as a ZIP from GitHub](https://github.com/OXOPSoftware/wasabi-kepler/archive/refs/heads/master.zip))
 - Required tools:
     - [Rust toolchain](https://rustup.rs/)
     - [Vulkan SDK](https://vulkan.lunarg.com/)
