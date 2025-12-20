@@ -16,5 +16,5 @@ Vulkan VUIDs:
     VUID-VkSwapchainCreateInfoKHR-presentMode-01281
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
-C:\Users\natal\Downloads>
+C:\Users\(CENSORED)\Downloads>
 
